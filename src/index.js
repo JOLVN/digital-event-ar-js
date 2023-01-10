@@ -3,6 +3,8 @@ const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 const camera = new THREE.Camera()
 
+const pane = new Tweakpane.Pane();
+
 scene.add(camera)
 
 const renderer = new THREE.WebGLRenderer({
@@ -62,11 +64,26 @@ const cubeMaterial = new THREE.MeshNormalMaterial({
 })
 
 const cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
-cube.position.y = 1
-console.log(cubeGeometry.parameters.height / 2);
-window.cube = cube
-console.log(cubeGeometry);
+
+cube.position.y = cubeGeometry.parameters.height / 2;
+cube.position.x = - cubeGeometry.parameters.height / 2;
 scene.add(cube)
+
+pane.addInput(cube.position, 'x', {
+    min: -5,
+    max: 5,
+    step: 0.1,
+});
+pane.addInput(cube.position, 'y', {
+    min: -5,
+    max: 5,
+    step: 0.1,
+});
+pane.addInput(cube.position, 'z', {
+    min: -5,
+    max: 5,
+    step: 0.1,
+});
 
 
 

@@ -9,7 +9,8 @@
   "dependencies": {
     "@ar-js-org/ar.js": "^3.4.3",
     "ar.js": "^2.2.2",
-    "three": "^0.134.0"
+    "three": "^0.134.0",
+    "tweakpane": "^3.1.1"
   },
   "devDependencies": {
     "vite": "^3.1.8"
