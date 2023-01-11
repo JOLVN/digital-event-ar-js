@@ -34,7 +34,6 @@ const arToolkitSource = new THREEx.ArToolkitSource({
 const onResize = () => {
     arToolkitSource.onResizeElement()
     arToolkitSource.copySizeTo(renderer.domElement)
-    console.log(renderer.domElement);
     if (arToolkitContext.arController !== null ) {
         arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)
     }
@@ -74,7 +73,7 @@ arToolkitContext.init(() => {
 
 const arMarkerControls = new THREEx.ArMarkerControls(arToolkitContext, marker1, {
     type: 'pattern',
-    patternUrl: 'marker.patt'
+    patternUrl: 'markers/marker.patt'
 })
 
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
@@ -99,6 +98,8 @@ gltfLoader.load(
 
 const animate = () => {
     requestAnimationFrame(animate)
+
+    cube.rotation.x += 0.001
 
     if (arToolkitSource.ready !== false) arToolkitContext.update(arToolkitSource.domElement);
     renderer.render(scene, camera)
