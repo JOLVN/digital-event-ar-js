@@ -1,16 +1,14 @@
-const canvas = document.querySelector("canvas.webgl");
+const gltfLoader = new THREE.GLTFLoader()
+const pane = new Tweakpane.Pane()
 
-const gltfLoader = new THREE.GLTFLoader();
-const pane = new Tweakpane.Pane();
+const scene = new THREE.Scene()
+const camera = new THREE.Camera()
+const marker1 = new THREE.Group()
+const marker2 = new THREE.Group()
 
-const scene = new THREE.Scene();
-const camera = new THREE.Camera();
-const marker1 = new THREE.Group();
-const marker2 = new THREE.Group();
-
-scene.add(camera);
-scene.add(marker1);
-scene.add(marker2);
+scene.add(camera)
+scene.add(marker1)
+scene.add(marker2)
 
 /**
  * RENDERER
@@ -22,7 +20,7 @@ const renderer = new THREE.WebGLRenderer({
 });
 document.body.appendChild(renderer.domElement);
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 /**
  * ARTOOLKITSOURCE
@@ -42,9 +40,9 @@ const onResize = () => {
 
 arToolkitSource.init(() => {
     setTimeout(() => {
-        onResize();
+        onResize()
     }, 1000);
-});
+})
 
 window.addEventListener("resize", function () {
     onResize();
@@ -60,7 +58,7 @@ const arToolkitContext = new THREEx.ArToolkitContext({
 });
 
 arToolkitContext.init(() => {
-    camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
+    camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix())
 });
 
 /**
@@ -78,14 +76,14 @@ const arMarkerControls1 = new THREEx.ArMarkerControls(
     }
 );
 
-const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
 const cubeMaterial = new THREE.MeshNormalMaterial({
     transparent: true,
     opacity: 0.5,
     side: THREE.DoubleSide,
 });
-const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-marker1.add(cube);
+const cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
+marker1.add(cube)
 
 // Marker 2
 
@@ -99,10 +97,10 @@ const arMarkerControls2 = new THREEx.ArMarkerControls(
 );
 
 gltfLoader.load("/models/spaceship.glb", (gltf) => {
-    gltf.scene.scale.x = 0.2;
-    gltf.scene.scale.y = 0.2;
-    gltf.scene.scale.z = 0.2;
-    marker2.add(gltf.scene);
+    gltf.scene.scale.x = 0.2
+    gltf.scene.scale.y = 0.2
+    gltf.scene.scale.z = 0.2
+    marker2.add(gltf.scene)
 });
 
 const animate = () => {
@@ -110,5 +108,5 @@ const animate = () => {
 
     cube.rotation.x += 0.001
 
-    animate();
+    animate()
 }
