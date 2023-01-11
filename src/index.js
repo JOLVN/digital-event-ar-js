@@ -1,14 +1,16 @@
-const canvas = document.querySelector('canvas.webgl')
+const canvas = document.querySelector("canvas.webgl");
 
-const gltfLoader = new THREE.GLTFLoader()
+const gltfLoader = new THREE.GLTFLoader();
 const pane = new Tweakpane.Pane();
 
-const scene = new THREE.Scene()
-const camera = new THREE.Camera()
-const marker1 = new THREE.Group()
+const scene = new THREE.Scene();
+const camera = new THREE.Camera();
+const marker1 = new THREE.Group();
+const marker2 = new THREE.Group();
 
-scene.add(camera)
-scene.add(marker1)
+scene.add(camera);
+scene.add(marker1);
+scene.add(marker2);
 
 /**
  * RENDERER
@@ -16,93 +18,97 @@ scene.add(marker1)
 
 const renderer = new THREE.WebGLRenderer({
     antialias: true,
-    alpha: true
-})
-document.body.appendChild(renderer.domElement)
-renderer.setSize(window.innerWidth, window.innerHeight)
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-
+    alpha: true,
+});
+document.body.appendChild(renderer.domElement);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 /**
  * ARTOOLKITSOURCE
  */
 
 const arToolkitSource = new THREEx.ArToolkitSource({
-    sourceType: 'webcam'
-})
+    sourceType: "webcam",
+});
 
 const onResize = () => {
     arToolkitSource.onResizeElement()
     arToolkitSource.copySizeTo(renderer.domElement)
-    if (arToolkitContext.arController !== null ) {
+    if (arToolkitContext.arController !== null) {
         arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)
     }
 }
 
 arToolkitSource.init(() => {
     setTimeout(() => {
-        onResize()
-    }, 1000)
-})
+        onResize();
+    }, 1000);
+});
 
-window.addEventListener('resize', function(){
-    onResize()
-})
-
+window.addEventListener("resize", function () {
+    onResize();
+});
 
 /**
  * ARTOOLKITCONTEXT
  */
 
 const arToolkitContext = new THREEx.ArToolkitContext({
-    cameraParametersUrl: 'camera_para.dat',
-    detection_mode: 'color_and_matrix'
-})
+    cameraParametersUrl: "camera_para.dat",
+    detection_mode: "color_and_matrix",
+});
 
 arToolkitContext.init(() => {
-    camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix())
-})
-
+    camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
+});
 
 /**
  * MARKERS
  */
 
-
 // Marker 1
 
-const arMarkerControls = new THREEx.ArMarkerControls(arToolkitContext, marker1, {
-    type: 'pattern',
-    patternUrl: 'markers/marker.patt'
-})
+const arMarkerControls1 = new THREEx.ArMarkerControls(
+    arToolkitContext,
+    marker1,
+    {
+        type: "pattern",
+        patternUrl: "markers/marker.patt",
+    }
+);
 
-const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
+const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
 const cubeMaterial = new THREE.MeshNormalMaterial({
     transparent: true,
     opacity: 0.5,
-    side: THREE.DoubleSide
-})
-const cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
-marker1.add(cube)
+    side: THREE.DoubleSide,
+});
+const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+marker1.add(cube);
 
+// Marker 2
 
-gltfLoader.load(
-    '/models/spaceship.glb',
-    (gltf) => {
-        gltf.scene.scale.x = 0.2
-        gltf.scene.scale.y = 0.2
-        gltf.scene.scale.z = 0.2
-        marker1.add(gltf.scene)
+const arMarkerControls2 = new THREEx.ArMarkerControls(
+    arToolkitContext,
+    marker2,
+    {
+        type: "pattern",
+        patternUrl: "markers/marker2.patt",
     }
-)
+);
+
+gltfLoader.load("/models/spaceship.glb", (gltf) => {
+    gltf.scene.scale.x = 0.2;
+    gltf.scene.scale.y = 0.2;
+    gltf.scene.scale.z = 0.2;
+    marker2.add(gltf.scene);
+});
 
 const animate = () => {
     requestAnimationFrame(animate)
 
     cube.rotation.x += 0.001
 
-    if (arToolkitSource.ready !== false) arToolkitContext.update(arToolkitSource.domElement);
-    renderer.render(scene, camera)
+    animate();
 }
-
-animate()
