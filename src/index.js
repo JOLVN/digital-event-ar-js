@@ -108,5 +108,9 @@ const animate = () => {
 
     cube.rotation.x += 0.001
 
+    if (arToolkitSource.ready !== false) arToolkitContext.update(arToolkitSource.domElement)
+
+    renderer.render(scene, camera);
+
     animate()
 }
